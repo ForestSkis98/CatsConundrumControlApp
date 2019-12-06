@@ -15,34 +15,33 @@ public class Control extends JPanel {
     private Arduino arduino;
 
     public Control(Arduino ard) {
+        arduino = ard;
         JFrame frame = new JFrame("EGEN Control App");
-        //frame.add(this);
-        frame.setSize(512, 512);
-        try {
+        frame.setSize(512, 512); // Pixel width and pixel height of window
+        try { // Attempts to add image to control
             frame.setContentPane(new JLabel((new ImageIcon(ImageIO.read(new File("src/Control Image.png"))))));
         } catch(Exception exception) {
             exception.printStackTrace();
         }
         frame.add(this);
         frame.setVisible(true);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        arduino = ard;
-        KeyListener listener = new MyKeyListener();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // When the window closes, the program stops        
+        KeyListener listener = new MyKeyListener(); // This will be what listens to when the keyboard is pressed
         addKeyListener(listener);
         setFocusable(true);
     }
 
     public class MyKeyListener implements KeyListener {
         @Override
-        public void keyTyped(KeyEvent e) {
+        public void keyTyped(KeyEvent e) { // Unnecesary function implementation
         }
 
         @Override
         public void keyPressed(KeyEvent e) {
-            
-            String tosend = "";
-            //System.out.println("keyPressed="+KeyEvent.getKeyText(e.getKeyCode()));
+            String tosend = ""; // Message to be sent to arduino port.
+            //Message denoted as: "L<leftmotorspeed>R<rightmotorspeed><pulseduration>"  eg: L5R37
             switch (KeyEvent.getKeyText(e.getKeyCode())) {
+                //Servo direction specification
                 case "Q":
                     System.out.println("Left forward");
                     tosend = "L" + speed + "R" + 5 + pulselength;
@@ -146,7 +145,7 @@ public class Control extends JPanel {
                     pulselength = 9;
                     break;
                 default:
-                    arduino.serialWrite("L5R51");
+                    arduino.serialWrite("L5R51"); // Both motors go stationary
                     try {
                         speed = Integer.parseInt(KeyEvent.getKeyText(e.getKeyCode()));
                     } catch (Exception exception) {
@@ -154,10 +153,8 @@ public class Control extends JPanel {
                     }
                     break;
             }
-            try {
+            try { // Short delay to prevent thread interruptions
                 Thread.sleep(100);
-//            String callback = arduino.serialRead(0);
-//            System.out.println(callback);
             } catch (InterruptedException ex) {
                 Logger.getLogger(Control.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -165,7 +162,6 @@ public class Control extends JPanel {
 
         @Override
         public void keyReleased(KeyEvent e) {
-            //System.out.println("keyReleased="+KeyEvent.getKeyText(e.getKeyCode()));
             switch(KeyEvent.getKeyText(e.getKeyCode())) {
                 case "Q":
                     System.out.println("Stop left forward");

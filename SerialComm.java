@@ -15,35 +15,13 @@ import java.util.logging.Logger;
  */
 public class SerialComm {
     public static void main(String[] args) {
-//        Scanner reader = new Scanner(System.in);
-
-
-        Arduino arduino = new Arduino("/dev/tty.usbmodem14311", 230400);
-        arduino.openConnection();
+        Arduino arduino = new Arduino("/dev/tty.usbmodem14311", 230400); // Sets up connection on specified port and baudrate
+        arduino.openConnection(); // Starts connection
         try {
-            Thread.sleep(2000);
+            Thread.sleep(2000); // Short delay to give time for connection
         } catch (InterruptedException ex) {
             Logger.getLogger(SerialComm.class.getName()).log(Level.SEVERE, null, ex);
         }
-        Control control = new Control(arduino);     
-        
-//        arduino.serialWrite("Hello World");
-//        try {
-//            Thread.sleep(2000);
-//        } catch (InterruptedException ex) {
-//            Logger.getLogger(SerialComm.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        String callback = arduino.serialRead(0);
-//        System.out.println(callback);
-//
-//        String input = "";
-//        while(!input.equals("q")) {
-//            System.out.println("Enter a value: ");
-//            input = reader.next();
-//            arduino.serialWrite(input);
-//        }
-//        arduino.serialWrite("10");
-//        arduino.closeConnection();
-//        //System.out.println(arduino.serialRead(1));
+        Control control = new Control(arduino); // Opens and starts control app.
     }
 }
